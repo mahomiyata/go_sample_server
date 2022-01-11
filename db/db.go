@@ -1,7 +1,6 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 
@@ -34,11 +33,7 @@ func GetDB() *gorm.DB {
 		}
 		return db
 	} else {
-		sqlDB, err := sql.Open("postgres", dbURL)
-		db, err := gorm.Open(postgres.New(postgres.Config{
-			Conn: sqlDB,
-		}), &gorm.Config{})
-		// db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+		db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 		if err != nil {
 			fmt.Println("failed to connect database")
 			panic(err)
