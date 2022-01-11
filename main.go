@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
-
 	"sample/server/db"
 	"sample/server/entity"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Note entity.Note
@@ -19,6 +19,12 @@ func main() {
 	db.Init()
 
 	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "This server is for Line Bot🦭",
+		})
+	})
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
