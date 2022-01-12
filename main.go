@@ -47,6 +47,22 @@ func main() {
 		c.JSON(200, notes)
 	})
 
+	// Get the user's notes
+	r.GET("/notes/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		db := db.GetDB()
+
+		var notes []Note
+		result := db.Where("user_id = ?", id).Find(&notes)
+
+		if result.Error != nil {
+			fmt.Println("Something Wrong...")
+			log.Fatal(result.Error)
+		}
+
+		c.JSON(http.StatusOK, notes)
+	})
+
 	// Post new note
 	r.POST("/notes", func(c *gin.Context) {
 		db := db.GetDB()
