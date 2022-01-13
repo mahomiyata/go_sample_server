@@ -1,5 +1,3 @@
-# Go Sample Server
-
 # Go Sample Server for Line Bot
 
 Line Botで送信したメッセージをデータベースに保存します。
