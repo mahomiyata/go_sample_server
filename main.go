@@ -27,19 +27,12 @@ func main() {
 		})
 	})
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	// Get 5 notes
 	r.GET("/notes", func(c *gin.Context) {
 		db := db.GetDB()
 
 		var notes []Note
 		result := db.Limit(5).Find(&notes)
-		// result := db.Order("id desc").Limit(5).Find(&notes)
 
 		if result.Error != nil {
 			fmt.Println("Something Wrong...")
@@ -49,7 +42,7 @@ func main() {
 		c.JSON(200, notes)
 	})
 
-	// Get the user's notes
+	// Get notes of a specified user
 	r.GET("/notes/:id/:start", func(c *gin.Context) {
 		id := c.Param("id")
 		start := c.Param("start")
