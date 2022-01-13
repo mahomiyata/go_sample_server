@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"sample/server/db"
 	"sample/server/entity"
@@ -38,6 +39,7 @@ func main() {
 
 		var notes []Note
 		result := db.Limit(5).Find(&notes)
+		// result := db.Order("id desc").Limit(5).Find(&notes)
 
 		if result.Error != nil {
 			fmt.Println("Something Wrong...")
@@ -48,12 +50,15 @@ func main() {
 	})
 
 	// Get the user's notes
-	r.GET("/notes/:id", func(c *gin.Context) {
+	r.GET("/notes/:id/:start", func(c *gin.Context) {
 		id := c.Param("id")
+		start := c.Param("start")
+		startNum, _ := strconv.Atoi(start)
+		offsetNum := (startNum - 1) * 5
 		db := db.GetDB()
 
 		var notes []Note
-		result := db.Where("user_id = ?", id).Find(&notes)
+		result := db.Order("id desc").Where("user_id = ?", id).Limit(5).Offset(offsetNum).Find(&notes)
 
 		if result.Error != nil {
 			fmt.Println("Something Wrong...")
